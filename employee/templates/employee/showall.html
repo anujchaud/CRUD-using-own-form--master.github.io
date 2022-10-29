@@ -1,0 +1,100 @@
+{% extends 'employee/base.html' %}
+{% block title %}ShowEmployee|{% endblock %}
+
+{% block css %} 
+li a, li span{
+  margin: 1px;
+  background: #f2f2f2;
+  padding: 6px 14px;
+  text-decoration: none;
+}
+  li a:hover,li span :hover{
+  background:#0069d9;
+  color: #fff;
+  text-decoration: none;
+
+}
+  li span a{
+  margin: 1px;
+  background-color: #ddd56;
+  padding: 6px 14px;
+}
+li.active span{
+  background:#oo69d9;
+  color:danger;
+
+}
+li.disabled span{
+  background:#e9ecdf;
+  color:red;
+}
+
+{% endblock %}
+
+
+{% block body %}
+<div class="container my-5 bg-light" style="border:1px solid ; border-radius: 10px; ">
+    <a href="/add/"><button class="btn btn-primary btn-lg ms-5 mb-3 mt-1 "> Add Employee </button></a>
+        {% comment %} Show Here all Employee {% endcomment %}
+
+        <h2  class="alert bg-info text-center"> Show Employee</h2>
+        <table class="table table-bordered">
+            <thead>
+              <tr class='text-center'>
+                <th scope="col">ID</th>
+                <th scope="col">Pic</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+
+                <th scope="col">Joining Date</th>
+                <th scope="col">Updated Date</th>
+                <th scope="col">Update</th>
+                <th scope="col">View</th>
+                <th scope="col">Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in emp %}  
+              <tr>
+                <th>{{i.id}}</th>
+                <td><img src="media/{{i.image}}" height="45px" width="54px" class="rounded-circle"></td>
+                <td>{{i.name}}</td>
+                <td>{{i.email}}</td>
+
+                <td>{{i.joining_date}}</td>
+                <td>{{i.updated_date}}</td>
+                <td><a href="/update/{{i.id}}"><button class="btn btn-primary">Modify</button></a></td>
+                <td><a href="/view/{{i.id}}"><button class="btn btn-success">View</button></a></td>
+                <td> <a href="/delete/{{i.id}}"><button class="btn btn-danger">Delete</button></a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+
+{% if emp.has_other_pages %}
+  <ul class="pagination">
+    {% if emp.has_previous %}
+      <li><a href="?page={{ emp.previous_page_number }}">PREV</a></li>
+    {% else %}
+      <li class="disabled"><span>X</span></li>
+    {% endif %}
+    {% for i in emp.paginator.page_range %}
+      {% if emp.number == i %}
+        <li class="active"><span>{{ i }}<span class="sr-only" style="background-color: red; color: white;">current</span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if emp.has_next %}
+      <li><a href="?page={{ emp.next_page_number }}">NEXT</li></a>
+    {% else %}
+      <li class="disabled"><span>X</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+
+
+</div>
+
+{% endblock %}
